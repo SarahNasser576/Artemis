@@ -179,9 +179,22 @@ export class UserManagementUpdateComponent implements OnInit {
 
     /**
      * Saves the user (creates new or updates existing).
-     * Shows a warning for Jenkins users when login changes.
+     * Blocks submission (without disabling the button) if the email fails the single-"@" check, showing a
+     * custom error message instead. Otherwise shows a warning for Jenkins users when login changes.
      */
     save(): void {
+        const emailValue = this.editForm.get('email')?.value ?? '';
+        if (!this.hasSingleAtSymbol(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The email address must contain exactly one "@" symbol.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
+
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
         const userOrganizations = this.user().organizations;
@@ -281,6 +294,21 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private onSaveError(): void {
         this.isSaving.set(false);
+    }
+
+    /**
+     * Checks whether a value contains exactly one "@" symbol.
+     * Empty values are treated as valid here; `Validators.required` on the control is the single source
+     * of truth for emptiness, so this check only concerns itself with the "@" count.
+     * @param value the value to check
+     */
+    private hasSingleAtSymbol(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const firstIndex = value.indexOf('@');
+        const lastIndex = value.lastIndexOf('@');
+        return firstIndex !== -1 && firstIndex === lastIndex;
     }
 
     /**

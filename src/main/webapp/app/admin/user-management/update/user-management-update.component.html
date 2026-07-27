@@ -169,9 +169,6 @@
                                     [translateValues]="{ min: EMAIL_MIN_LENGTH, max: EMAIL_MAX_LENGTH }"
                                 ></small>
                             }
-                            @if (editForm.get('email')!.errors?.email) {
-                                <small class="text-state-danger" jhiTranslate="global.messages.validate.email.invalid"></small>
-                            }
                         </div>
                     }
                 </div>
@@ -237,7 +234,7 @@
                 <tum-ui-button severity="secondary" size="small" (clicked)="previousState()"
                     ><fa-icon [icon]="faBan" /><span jhiTranslate="entity.action.cancel"></span
                 ></tum-ui-button>
-                <button type="submit" tumUiButton size="small" [disabled]="editForm.invalid || isSaving()" data-testid="save-user-button">
+                <button type="submit" tumUiButton size="small" [disabled]="isSaving()" data-testid="save-user-button">
                     <fa-icon [icon]="faSave" />
                     <span jhiTranslate="entity.action.save"></span>
                 </button>
