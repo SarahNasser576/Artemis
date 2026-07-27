@@ -194,6 +194,16 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
+        if (emailValue.indexOf('@') !== -1 && !this.hasDomainName(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The email address must contain a domain name.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
 
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
@@ -309,6 +319,13 @@ export class UserManagementUpdateComponent implements OnInit {
         const firstIndex = value.indexOf('@');
         const lastIndex = value.lastIndexOf('@');
         return firstIndex !== -1 && firstIndex === lastIndex;
+    }
+
+    private hasDomainName(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.substring(value.indexOf('@') + 1).replace(/\s+/g, '').length > 0;
     }
 
     /**
