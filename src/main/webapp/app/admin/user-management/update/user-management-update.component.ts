@@ -274,6 +274,16 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
+        if (this.domainLabelEndsWithHyphen(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: Domain labels must not end with a hyphen (-).',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
 
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
@@ -449,6 +459,14 @@ export class UserManagementUpdateComponent implements OnInit {
         }
         const domainLabels = this.getDomainLabels(value);
         return domainLabels.some(domainLabels => domainLabels.startsWith("-"));
+    }
+
+    private domainLabelEndsWithHyphen(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const domainLabels = this.getDomainLabels(value);
+        return domainLabels.some(domainLabels => domainLabels.endsWith("-"));
     }
 
     private getDomainLabels(value: string): string[] {
