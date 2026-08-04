@@ -254,6 +254,16 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
+        if (this.hasConsecutivePeriods(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The email address must not contain consecutive periods.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
 
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
@@ -415,6 +425,14 @@ export class UserManagementUpdateComponent implements OnInit {
         const username = value.substring(0, value.indexOf('@'));
         return username.endsWith(".") == true;
     }
+
+    private hasConsecutivePeriods(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.includes("..") == true;
+    }
+
 
     /**
      * Get the translation key for an authority
