@@ -183,6 +183,8 @@ export class UserManagementUpdateComponent implements OnInit {
      * custom error message instead. Otherwise shows a warning for Jenkins users when login changes.
      */
     save(): void {
+        this.alertService.closeAll();
+
         const emailValue = this.editForm.get('email')?.value ?? '';
         if (!this.hasSingleAtSymbol(emailValue)) {
             this.alertService.addAlert({
