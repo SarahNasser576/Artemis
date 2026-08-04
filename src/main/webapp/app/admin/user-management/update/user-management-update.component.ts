@@ -214,6 +214,16 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
+        if (this.domainStartsWithPeriod(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The domain must not start with a period.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
 
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
@@ -343,6 +353,14 @@ export class UserManagementUpdateComponent implements OnInit {
             return true;
         }
         return value.substring(0, value.indexOf('@')).replace(/\s+/g, '').length > 0;
+    }
+
+    private domainStartsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const domain = value.substring(value.indexOf('@') + 1);
+        return domain.startsWith(".") == true;
     }
 
     /**
