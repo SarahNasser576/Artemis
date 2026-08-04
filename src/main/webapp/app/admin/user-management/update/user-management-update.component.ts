@@ -234,6 +234,16 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
+        if (this.usernameStartsWithPeriod(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The username must not start with a period.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
 
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
@@ -378,6 +388,14 @@ export class UserManagementUpdateComponent implements OnInit {
             return true;
         }
         return value.endsWith(".") == true;
+    }
+
+    private usernameStartsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const username = value.substring(0, value.indexOf('@'));
+        return username.startsWith(".") == true;
     }
 
     /**
