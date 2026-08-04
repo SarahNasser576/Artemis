@@ -224,6 +224,16 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
+        if (this.domainEndsWithPeriod(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The domain must not end with a period.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+            return;
+        }
 
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
@@ -361,6 +371,13 @@ export class UserManagementUpdateComponent implements OnInit {
         }
         const domain = value.substring(value.indexOf('@') + 1);
         return domain.startsWith(".") == true;
+    }
+
+    private domainEndsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.endsWith(".") == true;
     }
 
     /**
