@@ -186,6 +186,16 @@ export class UserManagementUpdateComponent implements OnInit {
         this.alertService.closeAll();
 
         const emailValue = this.editForm.get('email')?.value ?? '';
+        if (this.hasConsecutivePeriods(emailValue)) {
+            this.alertService.addAlert({
+                type: AlertType.DANGER,
+                message: 'Error: The email address must not contain consecutive periods.',
+                timeout: 0,
+                disableTranslation: true,
+            });
+            this.editForm.get('email')?.markAsDirty();
+        }
+
         if (!this.hasSingleAtSymbol(emailValue)) {
             this.alertService.addAlert({
                 type: AlertType.DANGER,
@@ -196,94 +206,95 @@ export class UserManagementUpdateComponent implements OnInit {
             this.editForm.get('email')?.markAsDirty();
             return;
         }
-        if (emailValue.indexOf('@') !== -1 && !this.hasDomainName(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The email address must contain a domain name.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
+        else {
+            if (!this.hasUsername(emailValue)) {
+                this.alertService.addAlert({
+                    type: AlertType.DANGER,
+                    message: 'Error: The email address must contain a username.',
+                    timeout: 0,
+                    disableTranslation: true,
+                });
+                this.editForm.get('email')?.markAsDirty();
+            }
+            else {
+                if (this.usernameStartsWithPeriod(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: The username must not start with a period.',
+                        timeout: 0,
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }
+                if (this.usernameEndsWithPeriod(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: The username must not end with a period.',
+                        timeout: 0,
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }
+            }
+
+            if (!this.hasDomainName(emailValue)) {
+                this.alertService.addAlert({
+                    type: AlertType.DANGER,
+                    message: 'Error: The email address must contain a domain name.',
+                    timeout: 0,
+                    disableTranslation: true,
+                });
+                this.editForm.get('email')?.markAsDirty();
+            }
+            else {
+                if (this.domainStartsWithPeriod(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: The domain must not start with a period.',
+                        timeout: 0,
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }        
+                if (this.domainEndsWithPeriod(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: The domain must not end with a period.',
+                        timeout: 0,
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }  
+                if (this.domainLabelStartsWithHyphen(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: Domain labels must not start with a hyphen (-).',
+                        timeout: 0,
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }
+                if (this.domainLabelEndsWithHyphen(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: Domain labels must not end with a hyphen (-).',
+                        timeout: 0,
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }      
+            }
         }
-        if (emailValue.indexOf('@') !== -1 && !this.hasUsername(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The email address must contain a username.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.domainStartsWithPeriod(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The domain must not start with a period.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.domainEndsWithPeriod(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The domain must not end with a period.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.usernameStartsWithPeriod(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The username must not start with a period.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.usernameEndsWithPeriod(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The username must not end with a period.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.hasConsecutivePeriods(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: The email address must not contain consecutive periods.',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.domainLabelStartsWithHyphen(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: Domain labels must not start with a hyphen (-).',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
-            return;
-        }
-        if (this.domainLabelEndsWithHyphen(emailValue)) {
-            this.alertService.addAlert({
-                type: AlertType.DANGER,
-                message: 'Error: Domain labels must not end with a hyphen (-).',
-                timeout: 0,
-                disableTranslation: true,
-            });
-            this.editForm.get('email')?.markAsDirty();
+
+        if(this.hasConsecutivePeriods(emailValue)
+        || !this.hasUsername(emailValue)
+        || this.usernameStartsWithPeriod(emailValue)
+        || this.usernameEndsWithPeriod(emailValue)
+        || !this.hasDomainName(emailValue)
+        || this.domainStartsWithPeriod(emailValue)
+        || this.domainEndsWithPeriod(emailValue)
+        || this.domainLabelStartsWithHyphen(emailValue)
+        || this.domainLabelEndsWithHyphen(emailValue)) {
             return;
         }
 
