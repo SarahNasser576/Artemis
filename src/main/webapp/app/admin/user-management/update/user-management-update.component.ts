@@ -117,6 +117,9 @@ export class UserManagementUpdateComponent implements OnInit {
     /** Whether the form is currently being submitted */
     readonly isSaving = signal(false);
 
+    /** Custom email validation error messages, rendered inline under the email field (text-state-danger), same styling as the other field errors. */
+    readonly emailErrors = signal<string[]>([]);
+
     /** Authority to translation key mapping */
     private readonly authorityTranslationKeys: Record<string, string> = {
         ROLE_SUPER_ADMIN: 'artemisApp.userManagement.roles.superAdmin',
@@ -179,125 +182,132 @@ export class UserManagementUpdateComponent implements OnInit {
 
     /**
      * Saves the user (creates new or updates existing).
-     * Blocks submission (without disabling the button) if the email fails the single-"@" check, showing a
-     * custom error message instead. Otherwise shows a warning for Jenkins users when login changes.
+     * Blocks submission (without disabling the button) if the email fails any of the custom
+     * checks below, rendering the messages inline under the email field (same text-state-danger
+     * styling as the other field validators) instead of as page-level alerts.
      */
     save(): void {
+        /** Removes all displayed error messages when I click the Save button again */
         this.alertService.closeAll();
-
+        
         const emailValue = this.editForm.get('email')?.value ?? '';
+        /** Prints appropriate error message when the email address contains consecutive periods */
         if (this.hasConsecutivePeriods(emailValue)) {
             this.alertService.addAlert({
                 type: AlertType.DANGER,
                 message: 'Error: The email address must not contain consecutive periods.',
-                timeout: 0,
                 disableTranslation: true,
             });
             this.editForm.get('email')?.markAsDirty();
         }
-
+        /** Prints appropriate error message when the email address doesn't contain 
+         * exactly one "@" symbol 
+         */
         if (!this.hasSingleAtSymbol(emailValue)) {
             this.alertService.addAlert({
                 type: AlertType.DANGER,
                 message: 'Error: The email address must contain exactly one "@" symbol.',
-                timeout: 0,
                 disableTranslation: true,
             });
             this.editForm.get('email')?.markAsDirty();
             return;
-        }
-        else {
+        } else {
+            /** Prints appropriate error message when the email address doesn't contain a username */
             if (!this.hasUsername(emailValue)) {
                 this.alertService.addAlert({
                     type: AlertType.DANGER,
                     message: 'Error: The email address must contain a username.',
-                    timeout: 0,
                     disableTranslation: true,
                 });
                 this.editForm.get('email')?.markAsDirty();
-            }
-            else {
+            } else {
+                /** Prints appropriate error message when the username starts with a period */
                 if (this.usernameStartsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
                         message: 'Error: The username must not start with a period.',
-                        timeout: 0,
                         disableTranslation: true,
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
+                /** Prints appropriate error message when the username ends with a period */
                 if (this.usernameEndsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
                         message: 'Error: The username must not end with a period.',
-                        timeout: 0,
                         disableTranslation: true,
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
             }
-
+            /** Prints appropriate error message when the email address doesn't 
+             * contain a domain name 
+             */
             if (!this.hasDomainName(emailValue)) {
                 this.alertService.addAlert({
                     type: AlertType.DANGER,
                     message: 'Error: The email address must contain a domain name.',
-                    timeout: 0,
                     disableTranslation: true,
                 });
                 this.editForm.get('email')?.markAsDirty();
-            }
-            else {
+            } else {
+                /** Prints appropriate error message when the domain name starts with a period */
                 if (this.domainStartsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
                         message: 'Error: The domain must not start with a period.',
-                        timeout: 0,
-                        disableTranslation: true,
-                    });
-                    this.editForm.get('email')?.markAsDirty();
-                }        
-                if (this.domainEndsWithPeriod(emailValue)) {
-                    this.alertService.addAlert({
-                        type: AlertType.DANGER,
-                        message: 'Error: The domain must not end with a period.',
-                        timeout: 0,
-                        disableTranslation: true,
-                    });
-                    this.editForm.get('email')?.markAsDirty();
-                }  
-                if (this.domainLabelStartsWithHyphen(emailValue)) {
-                    this.alertService.addAlert({
-                        type: AlertType.DANGER,
-                        message: 'Error: Domain labels must not start with a hyphen (-).',
-                        timeout: 0,
                         disableTranslation: true,
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
+                /** Prints appropriate error message when the domain name ends with a period */
+                if (this.domainEndsWithPeriod(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: The domain must not end with a period.',
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }
+                /** Prints appropriate error message when at least one domain label
+                 *  starts with a hyphen 
+                 */
+                if (this.domainLabelStartsWithHyphen(emailValue)) {
+                    this.alertService.addAlert({
+                        type: AlertType.DANGER,
+                        message: 'Error: Domain labels must not start with a hyphen (-).',
+                        disableTranslation: true,
+                    });
+                    this.editForm.get('email')?.markAsDirty();
+                }
+                /** Prints appropriate error message when at least one domain label
+                 *  ends with a hyphen 
+                 */
                 if (this.domainLabelEndsWithHyphen(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
                         message: 'Error: Domain labels must not end with a hyphen (-).',
-                        timeout: 0,
                         disableTranslation: true,
                     });
                     this.editForm.get('email')?.markAsDirty();
-                }      
+                }
             }
         }
-
-        if(this.hasConsecutivePeriods(emailValue)
-        || !this.hasUsername(emailValue)
-        || this.usernameStartsWithPeriod(emailValue)
-        || this.usernameEndsWithPeriod(emailValue)
-        || !this.hasDomainName(emailValue)
-        || this.domainStartsWithPeriod(emailValue)
-        || this.domainEndsWithPeriod(emailValue)
-        || this.domainLabelStartsWithHyphen(emailValue)
-        || this.domainLabelEndsWithHyphen(emailValue)) {
+        /** Doesn't save the email address if at least one of the errors covered above occurs */
+        if (
+            this.hasConsecutivePeriods(emailValue) ||
+            !this.hasUsername(emailValue) ||
+            this.usernameStartsWithPeriod(emailValue) ||
+            this.usernameEndsWithPeriod(emailValue) ||
+            !this.hasDomainName(emailValue) ||
+            this.domainStartsWithPeriod(emailValue) ||
+            this.domainEndsWithPeriod(emailValue) ||
+            this.domainLabelStartsWithHyphen(emailValue) ||
+            this.domainLabelEndsWithHyphen(emailValue)
+        ) {
             return;
         }
-
+    
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
         const userOrganizations = this.user().organizations;
@@ -400,94 +410,6 @@ export class UserManagementUpdateComponent implements OnInit {
     }
 
     /**
-     * Checks whether a value contains exactly one "@" symbol.
-     * Empty values are treated as valid here; `Validators.required` on the control is the single source
-     * of truth for emptiness, so this check only concerns itself with the "@" count.
-     * @param value the value to check
-     */
-    private hasSingleAtSymbol(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        const firstIndex = value.indexOf('@');
-        const lastIndex = value.lastIndexOf('@');
-        return firstIndex !== -1 && firstIndex === lastIndex;
-    }
-
-    private hasDomainName(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        return value.substring(value.indexOf('@') + 1).replace(/\s+/g, '').length > 0;
-    }
-
-    private hasUsername(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        return value.substring(0, value.indexOf('@')).replace(/\s+/g, '').length > 0;
-    }
-
-    private domainStartsWithPeriod(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        const domain = value.substring(value.indexOf('@') + 1);
-        return domain.startsWith(".") == true;
-    }
-
-    private domainEndsWithPeriod(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        return value.endsWith(".") == true;
-    }
-
-    private usernameStartsWithPeriod(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        const username = value.substring(0, value.indexOf('@'));
-        return username.startsWith(".") == true;
-    }
-
-    private usernameEndsWithPeriod(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        const username = value.substring(0, value.indexOf('@'));
-        return username.endsWith(".") == true;
-    }
-
-    private hasConsecutivePeriods(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        return value.includes("..") == true;
-    }
-
-    private domainLabelStartsWithHyphen(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        const domainLabels = this.getDomainLabels(value);
-        return domainLabels.some(domainLabels => domainLabels.startsWith("-"));
-    }
-
-    private domainLabelEndsWithHyphen(value: string): boolean {
-        if (value == null || value === '') {
-            return true;
-        }
-        const domainLabels = this.getDomainLabels(value);
-        return domainLabels.some(domainLabels => domainLabels.endsWith("-"));
-    }
-
-    private getDomainLabels(value: string): string[] {
-        const domain = value.substring(value.indexOf('@') + 1);
-        return domain.split(".");
-    } 
-
-    /**
      * Get the translation key for an authority
      * @param authority the authority string (e.g., ROLE_ADMIN)
      */
@@ -517,5 +439,161 @@ export class UserManagementUpdateComponent implements OnInit {
         } else {
             authoritiesControl?.setValue([...currentAuthorities, authority]);
         }
+    }
+
+    /**
+     * Checks whether an email address contains exactly one "@" symbol.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with the "@" count.
+     * @param value the email address to check
+     */
+    private hasSingleAtSymbol(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const firstIndex = value.indexOf('@');
+        const lastIndex = value.lastIndexOf('@');
+        return firstIndex !== -1 && firstIndex === lastIndex;
+    }
+
+    /**
+     * Checks whether an email address contains a domain name.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * email address contains a domain name.
+     * @param value the email address to check
+     */
+    private hasDomainName(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.substring(value.indexOf('@') + 1).replace(/\s+/g, '').length > 0;
+    }
+    /**
+     * Checks whether an email address contains a username.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * email address contains a username.
+     * @param value the email address to check
+     */
+    private hasUsername(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.substring(0, value.indexOf('@')).replace(/\s+/g, '').length > 0;
+    }
+    /**
+     * Checks whether the domain name starts with a period.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * domain name starts with a period.
+     * @param value the email address to check
+     */
+    private domainStartsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const domain = value.substring(value.indexOf('@') + 1);
+        return domain.startsWith('.') == true;
+    }
+    /**
+     * Checks whether the domain name ends with a period.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * domain name ends with a period.
+     * @param value the email address to check
+     */
+    private domainEndsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.endsWith('.') == true;
+    }
+    /**
+     * Checks whether the username starts with a period.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * username starts with a period.
+     * @param value the email address to check
+     */
+    private usernameStartsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const username = value.substring(0, value.indexOf('@'));
+        return username.startsWith('.') == true;
+    }
+    /**
+     * Checks whether the username ends with a period.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * username ends with a period.
+     * @param value the email address to check
+     */
+    private usernameEndsWithPeriod(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const username = value.substring(0, value.indexOf('@'));
+        return username.endsWith('.') == true;
+    }
+    /**
+     * Checks whether the email address contains consecutive periods.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether the
+     * email address contains consecutive periods.
+     * @param value the email address to check
+     */
+    private hasConsecutivePeriods(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        return value.includes('..') == true;
+    }
+    /**
+     * Checks whether at least one domain label starts with a hyphen.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether
+     * at least one domain label starts with a hyphen.
+     * @param value the email address to check
+     */
+    private domainLabelStartsWithHyphen(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const domainLabels = this.getDomainLabels(value);
+        return domainLabels.some((label) => label.startsWith('-'));
+    }
+    /**
+     * Checks whether at least one domain label ends with a hyphen.
+     * Empty and null email addresses are treated as valid here;
+     * `Validators.required` on the control is the single source of truth
+     * for emptiness, so this check only concerns itself with whether
+     * at least one domain label ends with a hyphen.
+     * @param value the email address to check
+     */
+    private domainLabelEndsWithHyphen(value: string): boolean {
+        if (value == null || value === '') {
+            return true;
+        }
+        const domainLabels = this.getDomainLabels(value);
+        return domainLabels.some((label) => label.endsWith('-'));
+    }
+    /**
+     * Returns an array of all the domain labels of an email address.
+     * @param value the email address
+     */
+    private getDomainLabels(value: string): string[] {
+        const domain = value.substring(value.indexOf('@') + 1);
+        return domain.split('.');
     }
 }
