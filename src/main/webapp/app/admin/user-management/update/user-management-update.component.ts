@@ -116,10 +116,6 @@ export class UserManagementUpdateComponent implements OnInit {
 
     /** Whether the form is currently being submitted */
     readonly isSaving = signal(false);
-
-    /** Custom email validation error messages, rendered inline under the email field (text-state-danger), same styling as the other field errors. */
-    readonly emailErrors = signal<string[]>([]);
-
     /** Authority to translation key mapping */
     private readonly authorityTranslationKeys: Record<string, string> = {
         ROLE_SUPER_ADMIN: 'artemisApp.userManagement.roles.superAdmin',
@@ -133,7 +129,7 @@ export class UserManagementUpdateComponent implements OnInit {
     /** The reactive form for editing user properties */
     editForm!: FormGroup; // initialized in ngOnInit() via initializeForm()
 
-    /** Original login for detecting changes */
+    /** Original login for detecting, changes */
     private oldLogin?: string;
 
     /** Whether Jenkins profile is active */
