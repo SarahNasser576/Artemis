@@ -468,6 +468,248 @@ describe('UserManagementUpdateComponent', () => {
         });
     });
 
+    describe('save - email validation', () => {
+        let alertService: AlertService;
+        let addAlertSpy: ReturnType<typeof vi.spyOn>;
+
+        beforeEach(() => {
+            alertService = TestBed.inject(AlertService);
+            addAlertSpy = vi.spyOn(alertService, 'addAlert');
+            component.user.set(new User());
+            // @ts-ignore - accessing private method for testing
+            component.initializeForm();
+            vi.spyOn(adminUserService, 'create').mockReturnValue(of(new HttpResponse({ body: new User() })));
+        });
+
+        function setEmail(value: string) {
+            component.editForm.get('email')?.setValue(value);
+        }
+
+        it('should save successfully and show no email alert for a valid email', () => {
+            setEmail('testing@gmail.com');
+
+            component.save();
+
+            expect(addAlertSpy).not.toHaveBeenCalled();
+            expect(adminUserService.create).toHaveBeenCalledOnce();
+        });
+
+        it('should show exactly-one-@ error and block save when there is no "@" symbol', () => {
+            setEmail('CourseExams');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.singleAtSymbol',
+                }),
+            );
+            expect(addAlertSpy).toHaveBeenCalledOnce();
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show exactly-one-@ error and block save when there is more than one "@" symbol', () => {
+            setEmail('test@test@gmail.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.singleAtSymbol',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show missing-domain error and block save when there is no domain name', () => {
+            setEmail('courses@');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.missingDomain',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show missing-username error and block save when there is no username', () => {
+            setEmail('@rows.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.missingUsername',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show domain-starts-with-period error and block save', () => {
+            setEmail('testing@.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.domainStartsWithPeriod',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show domain-ends-with-period error and block save', () => {
+            setEmail('testing@gmail.com.');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.domainEndsWithPeriod',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show username-starts-with-period error and block save', () => {
+            setEmail('.testing@gmail.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.usernameStartsWithPeriod',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show username-ends-with-period error and block save', () => {
+            setEmail('testing.@example.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.usernameEndsWithPeriod',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show consecutive-periods error and block save', () => {
+            setEmail('course..exams@example.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.consecutivePeriods',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show domain-label-starts-with-hyphen error and block save', () => {
+            setEmail('courseexams@-students.gmail.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.domainLabelStartsWithHyphen',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show domain-label-ends-with-hyphen error and block save', () => {
+            setEmail('courseexams@students.gmail.com-');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.domainLabelEndsWithHyphen',
+                }),
+            );
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show both missing-domain and consecutive-periods errors together and block save', () => {
+            setEmail('testing..now@');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.consecutivePeriods',
+                }),
+            );
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.missingDomain',
+                }),
+            );
+            expect(addAlertSpy).toHaveBeenCalledTimes(2);
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should show both missing-username and domain-label-starts-with-hyphen errors together and block save', () => {
+            setEmail('@-gmail.com');
+
+            component.save();
+
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.missingUsername',
+                }),
+            );
+            expect(addAlertSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: AlertType.DANGER,
+                    message: 'artemisApp.userManagement.emailValidation.domainLabelStartsWithHyphen',
+                }),
+            );
+            expect(addAlertSpy).toHaveBeenCalledTimes(2);
+            expect(adminUserService.create).not.toHaveBeenCalled();
+        });
+
+        it('should mark the email control as dirty when an email error is shown', () => {
+            setEmail('CourseExams');
+
+            component.save();
+
+            expect(component.editForm.get('email')?.dirty).toBe(true);
+        });
+
+        it('should clear previous alerts before re-validating on a second save attempt', () => {
+            const closeAllSpy = vi.spyOn(alertService, 'closeAll');
+            setEmail('CourseExams');
+
+            component.save();
+            component.save();
+
+            expect(closeAllSpy).toHaveBeenCalledTimes(2);
+        });
+    });
+
     describe('initializeForm', () => {
         it('should return early if editForm already exists', () => {
             // Initialize user first to avoid undefined error

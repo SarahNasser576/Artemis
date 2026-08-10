@@ -185,25 +185,23 @@ export class UserManagementUpdateComponent implements OnInit {
     save(): void {
         /** Removes all displayed error messages when I click the Save button again */
         this.alertService.closeAll();
-        
+
         const emailValue = this.editForm.get('email')?.value ?? '';
         /** Prints appropriate error message when the email address contains consecutive periods */
         if (this.hasConsecutivePeriods(emailValue)) {
             this.alertService.addAlert({
                 type: AlertType.DANGER,
-                message: 'Error: The email address must not contain consecutive periods.',
-                disableTranslation: true,
+                message: 'artemisApp.userManagement.emailValidation.consecutivePeriods',
             });
             this.editForm.get('email')?.markAsDirty();
         }
-        /** Prints appropriate error message when the email address doesn't contain 
-         * exactly one "@" symbol 
+        /** Prints appropriate error message when the email address doesn't contain
+         * exactly one "@" symbol
          */
         if (!this.hasSingleAtSymbol(emailValue)) {
             this.alertService.addAlert({
                 type: AlertType.DANGER,
-                message: 'Error: The email address must contain exactly one "@" symbol.',
-                disableTranslation: true,
+                message: 'artemisApp.userManagement.emailValidation.singleAtSymbol',
             });
             this.editForm.get('email')?.markAsDirty();
             return;
@@ -212,8 +210,7 @@ export class UserManagementUpdateComponent implements OnInit {
             if (!this.hasUsername(emailValue)) {
                 this.alertService.addAlert({
                     type: AlertType.DANGER,
-                    message: 'Error: The email address must contain a username.',
-                    disableTranslation: true,
+                    message: 'artemisApp.userManagement.emailValidation.missingUsername',
                 });
                 this.editForm.get('email')?.markAsDirty();
             } else {
@@ -221,8 +218,7 @@ export class UserManagementUpdateComponent implements OnInit {
                 if (this.usernameStartsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
-                        message: 'Error: The username must not start with a period.',
-                        disableTranslation: true,
+                        message: 'artemisApp.userManagement.emailValidation.usernameStartsWithPeriod',
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
@@ -230,20 +226,18 @@ export class UserManagementUpdateComponent implements OnInit {
                 if (this.usernameEndsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
-                        message: 'Error: The username must not end with a period.',
-                        disableTranslation: true,
+                        message: 'artemisApp.userManagement.emailValidation.usernameEndsWithPeriod',
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
             }
-            /** Prints appropriate error message when the email address doesn't 
-             * contain a domain name 
+            /** Prints appropriate error message when the email address doesn't
+             * contain a domain name
              */
             if (!this.hasDomainName(emailValue)) {
                 this.alertService.addAlert({
                     type: AlertType.DANGER,
-                    message: 'Error: The email address must contain a domain name.',
-                    disableTranslation: true,
+                    message: 'artemisApp.userManagement.emailValidation.missingDomain',
                 });
                 this.editForm.get('email')?.markAsDirty();
             } else {
@@ -251,8 +245,7 @@ export class UserManagementUpdateComponent implements OnInit {
                 if (this.domainStartsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
-                        message: 'Error: The domain must not start with a period.',
-                        disableTranslation: true,
+                        message: 'artemisApp.userManagement.emailValidation.domainStartsWithPeriod',
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
@@ -260,30 +253,27 @@ export class UserManagementUpdateComponent implements OnInit {
                 if (this.domainEndsWithPeriod(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
-                        message: 'Error: The domain must not end with a period.',
-                        disableTranslation: true,
+                        message: 'artemisApp.userManagement.emailValidation.domainEndsWithPeriod',
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
                 /** Prints appropriate error message when at least one domain label
-                 *  starts with a hyphen 
+                 *  starts with a hyphen
                  */
                 if (this.domainLabelStartsWithHyphen(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
-                        message: 'Error: Domain labels must not start with a hyphen (-).',
-                        disableTranslation: true,
+                        message: 'artemisApp.userManagement.emailValidation.domainLabelStartsWithHyphen',
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
                 /** Prints appropriate error message when at least one domain label
-                 *  ends with a hyphen 
+                 *  ends with a hyphen
                  */
                 if (this.domainLabelEndsWithHyphen(emailValue)) {
                     this.alertService.addAlert({
                         type: AlertType.DANGER,
-                        message: 'Error: Domain labels must not end with a hyphen (-).',
-                        disableTranslation: true,
+                        message: 'artemisApp.userManagement.emailValidation.domainLabelEndsWithHyphen',
                     });
                     this.editForm.get('email')?.markAsDirty();
                 }
@@ -303,7 +293,7 @@ export class UserManagementUpdateComponent implements OnInit {
         ) {
             return;
         }
-    
+
         this.isSaving.set(true);
         // temporarily store the user organizations because they are not part of the edit form
         const userOrganizations = this.user().organizations;
@@ -439,7 +429,7 @@ export class UserManagementUpdateComponent implements OnInit {
 
     /**
      * Checks whether an email address contains exactly one "@" symbol.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with the "@" count.
      * @param value the email address to check
@@ -455,7 +445,7 @@ export class UserManagementUpdateComponent implements OnInit {
 
     /**
      * Checks whether an email address contains a domain name.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * email address contains a domain name.
@@ -469,7 +459,7 @@ export class UserManagementUpdateComponent implements OnInit {
     }
     /**
      * Checks whether an email address contains a username.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * email address contains a username.
@@ -483,7 +473,7 @@ export class UserManagementUpdateComponent implements OnInit {
     }
     /**
      * Checks whether the domain name starts with a period.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * domain name starts with a period.
@@ -491,14 +481,14 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private domainStartsWithPeriod(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         const domain = value.substring(value.indexOf('@') + 1);
         return domain.startsWith('.') == true;
     }
     /**
      * Checks whether the domain name ends with a period.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * domain name ends with a period.
@@ -506,13 +496,13 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private domainEndsWithPeriod(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         return value.endsWith('.') == true;
     }
     /**
      * Checks whether the username starts with a period.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * username starts with a period.
@@ -520,14 +510,14 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private usernameStartsWithPeriod(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         const username = value.substring(0, value.indexOf('@'));
         return username.startsWith('.') == true;
     }
     /**
      * Checks whether the username ends with a period.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * username ends with a period.
@@ -535,14 +525,14 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private usernameEndsWithPeriod(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         const username = value.substring(0, value.indexOf('@'));
         return username.endsWith('.') == true;
     }
     /**
      * Checks whether the email address contains consecutive periods.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether the
      * email address contains consecutive periods.
@@ -550,13 +540,13 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private hasConsecutivePeriods(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         return value.includes('..') == true;
     }
     /**
      * Checks whether at least one domain label starts with a hyphen.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether
      * at least one domain label starts with a hyphen.
@@ -564,14 +554,14 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private domainLabelStartsWithHyphen(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         const domainLabels = this.getDomainLabels(value);
         return domainLabels.some((label) => label.startsWith('-'));
     }
     /**
      * Checks whether at least one domain label ends with a hyphen.
-     * Empty and null email addresses are treated as valid here;
+     * Empty and null email addresses are treated as not exhibiting this problem.
      * `Validators.required` on the control is the single source of truth
      * for emptiness, so this check only concerns itself with whether
      * at least one domain label ends with a hyphen.
@@ -579,7 +569,7 @@ export class UserManagementUpdateComponent implements OnInit {
      */
     private domainLabelEndsWithHyphen(value: string): boolean {
         if (value == null || value === '') {
-            return true;
+            return false;
         }
         const domainLabels = this.getDomainLabels(value);
         return domainLabels.some((label) => label.endsWith('-'));

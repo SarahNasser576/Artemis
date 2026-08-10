@@ -87,7 +87,138 @@
             "addGroup": "+ Group",
             "enterGroup": "Enter a group",
             "organizations": "User organizations",
-            "email": "Email",
+            "email": {
+                "artemisApp": {
+                    "userManagement": {
+                        "batch": {
+                            "all": "All",
+                            "delete": {
+                                "question": "Are you sure you want to permanently delete <strong>{{ title }}</strong> users? This action can NOT be undone!",
+                                "typeNumberToConfirm": "Please type in the number of users to confirm."
+                            },
+                            "deleted": "Deleted {{ param }} Users"
+                        },
+                        "notEnrolled": {
+                            "delete": {
+                                "cancel": "No not enrolled users found to delete.",
+                                "caption": "Delete not enrolled users",
+                                "question": "Are you sure you want to permanently delete these users? <br> {{ users }} <br> These are <strong>{{ title }}</strong> users! This action can NOT be undone!"
+                            }
+                        },
+                        "filter": {
+                            "modal": {
+                                "open": "Filter ({{ num }})",
+                                "title": "Filter User",
+                                "close": "Close"
+                            },
+                            "authority": {
+                                "title": "Role ({{ num }})",
+                                "tooltip": "Filter the users according to their permissions",
+                                "super_admin": "Super Admin",
+                                "admin": "Admin",
+                                "instructor": "Instructor",
+                                "editor": "Editor",
+                                "ta": "Tutor",
+                                "user": "Student",
+                                "without": "No Role",
+                                "withoutTooltip": "Select all users without any role"
+                            },
+                            "origin": {
+                                "title": "Origin ({{ num }})",
+                                "tooltip": "Filters the users based on their administrative location",
+                                "internal": "Internal",
+                                "external": "External"
+                            },
+                            "registrationNumber": {
+                                "title": "Registration Number ({{ num }})",
+                                "tooltip": "Filter the users based on their registration number",
+                                "with_reg_no": "With registration number",
+                                "without_reg_no": "Without registration number"
+                            },
+                            "status": {
+                                "title": "Status ({{ num }})",
+                                "tooltip": "Filter the users based on their account status",
+                                "activated": "Activated",
+                                "deactivated": "Deactivated"
+                            },
+                            "course": {
+                                "title": "Course ({{ num }})",
+                                "tooltip": "Filters the users according to their course affiliation",
+                                "without": "No Course",
+                                "withoutTooltip": "Select all users without any course"
+                            },
+                            "apply": "Apply",
+                            "all": "All",
+                            "none": "None"
+                        },
+                        "home": {
+                            "title": "User Management",
+                            "createLabel": "Create a new user",
+                            "editLabel": "Edit user"
+                        },
+                        "created": "Created new user with identifier {{ param }}",
+                        "updated": "Updated User with identifier {{ param }}",
+                        "deleted": "Deleted User with identifier {{ param }}",
+                        "delete": {
+                            "question": "Are you sure you want to delete user <strong>{{ title }}</strong>?"
+                        },
+                        "detail": {
+                            "title": "User"
+                        },
+                        "login": "Login",
+                        "firstName": "First name",
+                        "lastName": "Last name",
+                        "name": "Name",
+                        "randomPassword": "Random password",
+                        "keepPassword": "Keep old password",
+                        "inputConstraints": "This field must contain {{min}} to {{max}} characters!",
+                        "groups": "Groups",
+                        "addGroup": "+ Group",
+                        "enterGroup": "Enter a group",
+                        "organizations": "User organizations",
+                        "email": "Email",
+                        "emailValidation": {
+                            "consecutivePeriods": "The email address must not contain consecutive periods.",
+                            "singleAtSymbol": "The email address must contain exactly one \"@\" symbol.",
+                            "missingUsername": "The email address must contain a username.",
+                            "usernameStartsWithPeriod": "The username must not start with a period.",
+                            "usernameEndsWithPeriod": "The username must not end with a period.",
+                            "missingDomain": "The email address must contain a domain name.",
+                            "domainStartsWithPeriod": "The domain must not start with a period.",
+                            "domainEndsWithPeriod": "The domain must not end with a period.",
+                            "domainLabelStartsWithHyphen": "Domain labels must not start with a hyphen (-).",
+                            "domainLabelEndsWithHyphen": "Domain labels must not end with a hyphen (-)."
+                        },
+                        "registrationNumber": "Registration Number",
+                        "activated": "Activated",
+                        "deactivated": "Deactivated",
+                        "isTestUser": "Test user",
+                        "isTestUserTooltip": "Mark this account as a test or QA account. Test users are excluded from all usage statistics (e.g. the admin charts and the active-users counts). This flag is managed explicitly and is independent of the login.",
+                        "globalRoles": "Global Roles",
+                        "roles": {
+                            "superAdmin": "Super Admin",
+                            "admin": "Admin",
+                            "instructor": "Instructor",
+                            "editor": "Editor",
+                            "tutor": "Tutor",
+                            "user": "Student"
+                        },
+                        "langKey": "Language",
+                        "passwordTooltip": "This setting can only be changed for new users. Notice, that you can only set or change passwords for internal users.",
+                        "internal": "Internal",
+                        "createdBy": "Created by",
+                        "createdDate": "Created date",
+                        "lastModifiedBy": "Modified by",
+                        "lastModifiedDate": "Modified date",
+                        "searchForUser": "Search for User: ",
+                        "search": "Search",
+                        "loading": "Loading...",
+                        "searchError": "Search term must be empty or contain at least 3 characters.",
+                        "jenkinsChange": "Changing the user's login is not supported for your current setup (Jenkins). You may have to manually update the user's login in Jenkins.\nYou changed the user <i>{{ oldLogin }}</i> to <i>{{ newLogin }}</i>.",
+                        "profilePicture": "Profile Picture"
+                    }
+                }
+            },
             "registrationNumber": "Registration Number",
             "activated": "Activated",
             "deactivated": "Deactivated",
