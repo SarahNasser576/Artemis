@@ -87,137 +87,18 @@
             "addGroup": "+ Gruppe",
             "enterGroup": "Gruppe eingeben",
             "organizations": "Nutzer:in Organisationen",
-            "email": {
-                "artemisApp": {
-                    "userManagement": {
-                        "batch": {
-                            "all": "Alle",
-                            "delete": {
-                                "question": "Sollen diese <strong>{{ title }}</strong> Nutzer:innen wirklich dauerhaft gelöscht werden? Diese Aktion kann NICHT rückgängig gemacht werden!",
-                                "typeNumberToConfirm": "Bitte gib die Anzahl der Nutzer:innen zur Bestätigung ein."
-                            },
-                            "deleted": "{{ param }} Nutzer:innen wurden gelöscht"
-                        },
-                        "notEnrolled": {
-                            "delete": {
-                                "cancel": "Keine nicht eingeschriebenen Nutzer:innen zum Löschen gefunden.",
-                                "caption": "Nicht eingeschriebene Nutzer:innen löschen",
-                                "question": "Sollen diese Nutzer:innen wirklich dauerhaft gelöscht werden? <br> {{ users }} <br> Das sind <strong>{{ title }}</strong> Nutzer:innen! Diese Aktion kann NICHT rückgängig gemacht werden!"
-                            }
-                        },
-                        "filter": {
-                            "modal": {
-                                "open": "Filter ({{ num }})",
-                                "title": "Filter Nutzer:innen",
-                                "close": "Schließen"
-                            },
-                            "authority": {
-                                "title": "Rolle ({{ num }})",
-                                "tooltip": "Filter die Nutzer:innen anhand ihrer Berechtigungen",
-                                "super_admin": "Super-Administrator:in",
-                                "admin": "Administrator:in",
-                                "instructor": "Lehrende",
-                                "editor": "Editor:in",
-                                "ta": "Tutor:in",
-                                "user": "Studierende",
-                                "without": "Keine Rolle",
-                                "withoutTooltip": "Wähle alle Nutzer:innen ohne Rolle"
-                            },
-                            "origin": {
-                                "title": "Herkunft ({{ num }})",
-                                "tooltip": "Filter die Nutzer:innen anhand ihres Verwaltungsortes",
-                                "internal": "Intern",
-                                "external": "Extern"
-                            },
-                            "registrationNumber": {
-                                "title": "Die Registrierungsnummer ({{ num }})",
-                                "tooltip": "Filter die Nutzer:innen anhand ihrer Registrierungsnummer",
-                                "with_reg_no": "Mit Registrierungsnummer",
-                                "without_reg_no": "Ohne Registrierungsnummer"
-                            },
-                            "status": {
-                                "title": "Status ({{ num }})",
-                                "tooltip": "Filter die Nutzer:innen anhand ihres Accountstatus",
-                                "activated": "Aktiviert",
-                                "deactivated": "Deaktiviert"
-                            },
-                            "course": {
-                                "title": "Kurs ({{ num }})",
-                                "tooltip": "Filter die Nutzer:innen anhand ihrer Kurszugehörigkeit",
-                                "without": "Kein Kurs",
-                                "withoutTooltip": "Wähle alle Nutzer:innen ohne Kurs"
-                            },
-                            "apply": "Anwenden",
-                            "all": "Alle",
-                            "none": "Keinen"
-                        },
-                        "home": {
-                            "title": "Nutzer:in",
-                            "createLabel": "Nutzer:in erstellen",
-                            "editLabel": "Nutzer:in bearbeiten"
-                        },
-                        "created": "Nutzer:in wurde mit ID {{ param }} erstellt",
-                        "updated": "Nutzer:in mit ID {{ param }} wurde geändert",
-                        "deleted": "Nutzer:in mit ID {{ param }} wurde gelöscht",
-                        "delete": {
-                            "question": "Soll Nutzer:in <strong>{{ title }}</strong> wirklich gelöscht werden?"
-                        },
-                        "detail": {
-                            "title": "User"
-                        },
-                        "login": "Login",
-                        "firstName": "Vorname",
-                        "lastName": "Nachname",
-                        "name": "Name",
-                        "randomPassword": "Zufälliges Passwort",
-                        "keepPassword": "Altes Passwort behalten",
-                        "inputConstraints": "Das Feld muss zwischen {{min}} und {{max}} Zeichen enthalten!",
-                        "groups": "Gruppen",
-                        "addGroup": "+ Gruppe",
-                        "enterGroup": "Gruppe eingeben",
-                        "organizations": "Nutzer:in Organisationen",
-                        "email": "E-Mail",
-                        "emailValidation": {
-                            "consecutivePeriods": "Die E-Mail-Adresse darf keine aufeinanderfolgenden Punkte enthalten.",
-                            "singleAtSymbol": "Die E-Mail-Adresse muss genau ein \"@\"-Symbol enthalten.",
-                            "missingUsername": "Die E-Mail-Adresse muss einen Benutzernamen enthalten.",
-                            "usernameStartsWithPeriod": "Der Benutzername darf nicht mit einem Punkt beginnen.",
-                            "usernameEndsWithPeriod": "Der Benutzername darf nicht mit einem Punkt enden.",
-                            "missingDomain": "Die E-Mail-Adresse muss einen Domainnamen enthalten.",
-                            "domainStartsWithPeriod": "Die Domain darf nicht mit einem Punkt beginnen.",
-                            "domainEndsWithPeriod": "Die Domain darf nicht mit einem Punkt enden.",
-                            "domainLabelStartsWithHyphen": "Domain-Bestandteile dürfen nicht mit einem Bindestrich (-) beginnen.",
-                            "domainLabelEndsWithHyphen": "Domain-Bestandteile dürfen nicht mit einem Bindestrich (-) enden."
-                        },
-                        "registrationNumber": "Matrikelnummer",
-                        "activated": "Aktiv",
-                        "deactivated": "Deaktiviert",
-                        "isTestUser": "Testkonto",
-                        "isTestUserTooltip": "Markiert dieses Konto als Test- oder QA-Konto. Testkonten werden aus allen Nutzungsstatistiken ausgeschlossen (z. B. den Admin-Diagrammen und der Zahl aktiver Nutzer:innen). Dieses Kennzeichen wird explizit verwaltet und ist unabhängig vom Login.",
-                        "globalRoles": "Globale Rollen",
-                        "roles": {
-                            "superAdmin": "Super-Administrator:in",
-                            "admin": "Administrator:in",
-                            "instructor": "Lehrende:r",
-                            "editor": "Editor:in",
-                            "tutor": "Tutor:in",
-                            "user": "Nutzer:in"
-                        },
-                        "langKey": "Sprache",
-                        "internal": "Intern",
-                        "passwordTooltip": "Du kannst diese Einstellung nur für neue Nutzer:innen ändern. Bitte beachte, dass du nur Passwörter für interne Nutzer:innen setzen oder ändern kannst.",
-                        "createdBy": "Erstellt von",
-                        "createdDate": "Erstellt am",
-                        "lastModifiedBy": "Bearbeitet von",
-                        "lastModifiedDate": "Zuletzt bearbeitet",
-                        "searchForUser": "Suche nach Nutzer:innen: ",
-                        "search": "Suche",
-                        "loading": "Laden...",
-                        "searchError": "Der Suchbegriff muss leer oder mindestens 3 Zeichen lang sein.",
-                        "jenkinsChange": "Die Änderung des Benutzernamens wird für dein aktuelles Setup (Jenkins) nicht unterstützt. Möglicherweise musst du den Benutzernamen in Jenkins manuell ändern.\nDu hast den Benutzer <i>{{ oldLogin }}</i> auf <i>{{ newLogin }}</i> aktualisiert.",
-                        "profilePicture": "Profilbild"
-                    }
-                }
+            "email": "E-Mail",
+            "emailValidation": {
+                "consecutivePeriods": "Die E-Mail-Adresse darf keine aufeinanderfolgenden Punkte enthalten.",
+                "singleAtSymbol": "Die E-Mail-Adresse muss genau ein \"@\"-Symbol enthalten.",
+                "missingUsername": "Die E-Mail-Adresse muss einen Benutzernamen enthalten.",
+                "usernameStartsWithPeriod": "Der Benutzername darf nicht mit einem Punkt beginnen.",
+                "usernameEndsWithPeriod": "Der Benutzername darf nicht mit einem Punkt enden.",
+                "missingDomain": "Die E-Mail-Adresse muss einen Domainnamen enthalten.",
+                "domainStartsWithPeriod": "Die Domain darf nicht mit einem Punkt beginnen.",
+                "domainEndsWithPeriod": "Die Domain darf nicht mit einem Punkt enden.",
+                "domainLabelStartsWithHyphen": "Domain-Bestandteile dürfen nicht mit einem Bindestrich (-) beginnen.",
+                "domainLabelEndsWithHyphen": "Domain-Bestandteile dürfen nicht mit einem Bindestrich (-) enden."
             },
             "registrationNumber": "Matrikelnummer",
             "activated": "Aktiv",
