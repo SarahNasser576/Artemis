@@ -636,7 +636,7 @@ describe('UserManagementUpdateComponent', () => {
         });
 
         it('should show domain-label-ends-with-hyphen error and block save', () => {
-            setEmail('courseexams@students.gmail.com-');
+            setEmail('courseexams@students.gmail-.com');
 
             component.save();
 
